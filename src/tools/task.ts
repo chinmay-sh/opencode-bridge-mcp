@@ -1,14 +1,19 @@
 import { z } from "zod"
 import { withClient } from "../serviceClient.js"
 import type { SessionTracker } from "../tracker.js"
-import { defaultTitle, jsonResult, parseModelString } from "./common.js"
+import { defaultTitle, defaultWorkdir, jsonResult, parseModelString } from "./common.js"
 
 export const taskInput = z.object({
   task: z.string().min(1).describe("The full task for the OpenCode worker to perform"),
   title: z.string().optional().describe('Session title; defaults to "Task <first 40 chars>"'),
   agent: z.string().optional().describe('OpenCode agent, e.g. "build" | "plan" | "explore"'),
   model: z.string().optional().describe('Model as "provider/model" or "provider/model#variant"'),
-  directory: z.string().optional().describe("Working directory for the session; default is this server's cwd"),
+  directory: z
+    .string()
+    .optional()
+    .describe(
+      "Working directory for the session; defaults to a sandbox workdir/ folder inside the opencode-bridge-mcp package so delegated tasks never touch other projects. Pass an explicit path to target a real project.",
+    ),
 })
 
 export type TaskInput = z.infer<typeof taskInput>
@@ -30,7 +35,7 @@ export async function runTask(input: TaskInput, tracker: SessionTracker): Promis
       title,
       agent: input.agent ?? null,
       model: model ?? null,
-      location: { directory: input.directory ?? process.cwd() },
+      location: { directory: input.directory ?? defaultWorkdir() },
     }),
   )
 

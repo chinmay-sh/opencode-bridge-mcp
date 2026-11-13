@@ -1,3 +1,6 @@
+import { existsSync, mkdirSync } from "node:fs"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js"
 
 /** Serialize a payload as the tool result (JSON string per the output contract). */
@@ -29,4 +32,18 @@ export function parseModelString(
   const [id, variant] = rest.split("#")
   if (!id) return undefined
   return variant ? { id, providerID, variant } : { id, providerID }
+}
+
+/**
+ * Default sandbox for delegated sessions: `<package-root>/workdir`.
+ *
+ * Keeps delegated tasks out of whatever directory the bridge process happens
+ * to run in; callers pass an explicit `directory` to target a real project.
+ */
+export function defaultWorkdir(): string {
+  // dist/tools/common.js -> dist/tools -> dist -> package root
+  const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..")
+  const dir = path.join(packageRoot, "workdir")
+  mkdirSync(dir, { recursive: true })
+  return dir
 }

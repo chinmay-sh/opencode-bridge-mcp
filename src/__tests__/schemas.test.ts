@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest"
-import { defaultTitle, parseModelString } from "../tools/common.js"
+import { existsSync } from "node:fs"
+import path from "node:path"
+import { defaultTitle, defaultWorkdir, parseModelString } from "../tools/common.js"
 import { taskInput } from "../tools/task.js"
 import { waitInput } from "../tools/wait.js"
 import { statusInput } from "../tools/status.js"
@@ -29,6 +31,20 @@ describe("parseModelString", () => {
   })
   it("returns undefined for a bare model with no provider", () => {
     expect(parseModelString("gpt-6-luna")).toBeUndefined()
+  })
+})
+
+describe("defaultWorkdir", () => {
+  it("returns <package-root>/workdir, creates it, and is stable across calls", () => {
+    const dir = defaultWorkdir()
+    expect(path.basename(dir)).toBe("workdir")
+    expect(existsSync(dir)).toBe(true)
+    expect(defaultWorkdir()).toBe(dir)
+  })
+  it("resolves inside the package, not the process cwd", () => {
+    const dir = defaultWorkdir()
+    expect(dir).toContain(path.join("opencode-bridge-mcp", "workdir"))
+    expect(path.dirname(dir).endsWith("opencode-bridge-mcp")).toBe(true)
   })
 })
 

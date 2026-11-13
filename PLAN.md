@@ -188,7 +188,7 @@ opencode_task:
   title?: string        // default "Task <first 40 chars>"
   agent?: string        // e.g. "build" | "plan" | "explore" — session.create({ agent })
   model?: string        // "provider/model" or "provider/model#variant"
-  directory?: string    // working directory; default process.cwd()
+  directory?: string    // working directory; default <package>/workdir sandbox
 
 opencode_wait:
   sessionId: string     // required

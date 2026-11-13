@@ -110,13 +110,15 @@ task: string      // the full task; required
 title?: string    // default "Task <first 40 chars>"
 agent?: string    // "build" | "plan" | "explore" | ...
 model?: string    // "provider/model" or "provider/model#variant"
-directory?: string// working directory; default process.cwd()
+directory?: string// working directory; default is a sandbox workdir/ inside this package (see below)
 ```
 
 ```jsonc
 // → returns immediately
 { "sessionId": "ses_...", "title": "...", "status": "working" }
 ```
+
+**Default working directory (sandbox).** By default, sessions run in a `workdir/` folder auto-created inside the `opencode-bridge-mcp` package — delegated tasks stay sandboxed and never touch your other projects. Pass `directory: "E:\\path\\to\\project"` explicitly when the task *should* work on a real project (that directory is fixed for the session's lifetime).
 
 ### `opencode_wait` — get the answer *(blocking)* ⭐
 
