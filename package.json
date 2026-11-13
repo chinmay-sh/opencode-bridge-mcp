@@ -1,0 +1,32 @@
+{
+  "name": "opencode-bridge-mcp",
+  "version": "0.1.0",
+  "description": "MCP server exposing OpenCode as delegate-worker tools (Claude Code and other MCP clients)",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "opencode-bridge-mcp": "dist/index.js"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc && node dist/index.js",
+    "test": "vitest run",
+    "test:unit": "vitest run --exclude \"src/__tests__/e2e.test.ts\"",
+    "test:e2e": "vitest run src/__tests__/e2e.test.ts",
+    "lint": "tsc --noEmit -p tsconfig.lint.json"
+  },
+  "dependencies": {
+    "@opencode/client": "2.2.7",
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  }
+}
