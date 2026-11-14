@@ -97,6 +97,10 @@ Verify inside Claude Code with `/mcp` — you should see six `opencode_*` tools.
 }
 ```
 
+> **Install OpenCode with Bun** (`bun add -g @opencode/cli`). The bridge is only tested against a Bun install; with other installers it falls back to `opencode` on PATH, which may open a console window on Windows.
+
+> **Windows:** Bun's `~\.bun\bin\opencode.exe` shim opens a console window when it starts the service, so the bridge reads the shim's `opencode.bunx` and launches the real binary directly. Set `OPENCODE_BIN` in the server's `env` to override the path.
+
 > **Note:** one bridge process per client is fine — delegated work lives in the OpenCode service, and the bridge rebuilds its view after any restart.
 
 ---

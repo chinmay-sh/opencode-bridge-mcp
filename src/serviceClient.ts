@@ -1,5 +1,6 @@
 import { OpenCode, type OpenCodeClient } from "@opencode/client"
 import { discover, ensure, headers } from "@opencode/client/service"
+import { opencodeBin } from "./opencodeBin.js"
 
 /**
  * Singleton connection to the local OpenCode background service.
@@ -23,7 +24,9 @@ async function connect(): Promise<OpenCodeClient> {
   let endpoint: { url: string; auth?: { type: "basic"; username: string; password: string } } | undefined = await discover()
   if (!endpoint) {
     log("no running service found; starting one via ensure()")
+    const bin = opencodeBin()
     endpoint = await ensure({
+      command: bin ? [bin, "serve", "--service"] : undefined,
       onStart: (reason) => log(`starting service (${reason})`),
     })
   }
