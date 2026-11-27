@@ -20,8 +20,8 @@
     "lint": "tsc --noEmit -p tsconfig.lint.json"
   },
   "dependencies": {
-    "@opencode/client": "2.2.7",
     "@modelcontextprotocol/sdk": "^1.27.1",
+    "@opencode/client": "2.4.2",
     "zod": "^3.25.76"
   },
   "devDependencies": {
